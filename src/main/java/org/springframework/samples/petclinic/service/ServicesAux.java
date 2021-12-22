@@ -9,14 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Clinica;
 import org.springframework.samples.petclinic.model.Doctor;
 import org.springframework.samples.petclinic.model.Laboratorio;
+import org.springframework.samples.petclinic.model.Material;
 import org.springframework.samples.petclinic.model.Paciente;
 import org.springframework.samples.petclinic.model.Producto;
+import org.springframework.samples.petclinic.model.Proveedor;
 import org.springframework.samples.petclinic.model.Trabajo;
 import org.springframework.samples.petclinic.repository.ClinicaRepository;
 import org.springframework.samples.petclinic.repository.DoctorRepository;
 import org.springframework.samples.petclinic.repository.LaboratorioRepository;
+import org.springframework.samples.petclinic.repository.MaterialRepository;
 import org.springframework.samples.petclinic.repository.PacienteRepository;
 import org.springframework.samples.petclinic.repository.ProductoRepository;
+import org.springframework.samples.petclinic.repository.ProveedorRepository;
 import org.springframework.samples.petclinic.repository.TrabajoRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +39,10 @@ public class ServicesAux {
 	TrabajoRepository trabajoRep;
 	@Autowired 
 	ProductoRepository productoRepository;
+	@Autowired 
+	MaterialRepository materialRepo;
+	@Autowired
+	ProveedorRepository proveedorRepo;
 
 	public List<Doctor> getAllDoctors() {
 		return doctorRep.findAll();
@@ -76,12 +84,36 @@ public class ServicesAux {
 		trabajoRep.save(t);
 	}
 
-	public Object getAllProductos() {
+	public List<Producto> getAllProductos() {
 		return productoRepository.findAll();
+	}
+
+	public List<Producto> getAllProductosOf(Trabajo t) {
+		return productoRepository.findAllByTrabajo(t);
+	}
+
+	public List<Material> getAllMateriales() {
+		return materialRepo.findAll();
+	}
+
+	public List<Material> getAllMaterialesOf(Producto p) {
+		return materialRepo.findAllByProduct(p);
+	}
+
+	public List<Proveedor> getAllProveedores() {
+		return proveedorRepo.findAll();
 	}
 
     public void createProduct(@Valid Producto p) {
 		productoRepository.save(p);
     }
+
+	public void createMaterial(@Valid Material m){
+		materialRepo.save(m);
+	}
+
+	public void createProveedor(@Valid Proveedor p){
+		proveedorRepo.save(p);
+	}
     
 }

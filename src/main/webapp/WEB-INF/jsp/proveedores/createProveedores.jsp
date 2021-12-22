@@ -8,16 +8,13 @@
 
 <petclinic:layout pageName="EnemiesCards">
     <h2>
-		Nuevo producto
+		Nuevo proveedor
     </h2>
-    <form:form method="POST" modelAttribute="product" class="form-horizontal" id="add-owner-form">
+    <form:form method="POST" modelAttribute="proveedor" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Nombre" name="nombre"/> 
-            <petclinic:inputField label="Codigo" name="codigo"/>   
-            <petclinic:inputField label="Precio Base" name="precioBase"/>   
-            <petclinic:inputField label="IVA" name="IVA"/>   
-            <c:out value="Color"></c:out><p><select></select></p>
-            <c:out value="Categoria"></c:out> <p><select></select></p>                             
+            <petclinic:inputField label="Nombre" name="nombre"/>     
+            <petclinic:inputField label="Direccion" name="direccion"/>    
+            <petclinic:inputField label="DNI" name="DNI"/>                                 
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
