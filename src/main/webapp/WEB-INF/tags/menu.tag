@@ -22,11 +22,44 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
-				<petclinic:menuItem active="${name eq 'home'}" url="/"
-					title="home page">
-					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
-				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'vets'}" url="" title="clientes" dropdown="${true}">
+						<ul class="dropdown-menu">
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value=" /clients/doctors" />">Doctores</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value="/clients/clinics" />">Clinicas</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value=" /clients/laboratories" />">Laboratorios</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value=" /clients/patients" />">Pacientes</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+						</ul>
+						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+						<span>Clientes</span>
+					</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
 					title="find owners">
