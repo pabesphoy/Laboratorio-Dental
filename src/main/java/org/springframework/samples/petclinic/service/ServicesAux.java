@@ -3,15 +3,21 @@ package org.springframework.samples.petclinic.service;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Clinica;
 import org.springframework.samples.petclinic.model.Doctor;
 import org.springframework.samples.petclinic.model.Laboratorio;
 import org.springframework.samples.petclinic.model.Paciente;
+import org.springframework.samples.petclinic.model.Producto;
+import org.springframework.samples.petclinic.model.Trabajo;
 import org.springframework.samples.petclinic.repository.ClinicaRepository;
 import org.springframework.samples.petclinic.repository.DoctorRepository;
 import org.springframework.samples.petclinic.repository.LaboratorioRepository;
 import org.springframework.samples.petclinic.repository.PacienteRepository;
+import org.springframework.samples.petclinic.repository.ProductoRepository;
+import org.springframework.samples.petclinic.repository.TrabajoRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +31,10 @@ public class ServicesAux {
 	ClinicaRepository clinicaRep;
 	@Autowired 
 	LaboratorioRepository laboratorioRep;
+	@Autowired 
+	TrabajoRepository trabajoRep;
+	@Autowired 
+	ProductoRepository productoRepository;
 
 	public List<Doctor> getAllDoctors() {
 		return doctorRep.findAll();
@@ -45,6 +55,10 @@ public class ServicesAux {
 		return clinicaRep.findAll();
 	}
 
+	public List<Trabajo> getAllTrabajos(){
+		return trabajoRep.findAll();
+	}
+
 	public void createDoctor(Doctor doctor){
 		doctorRep.save(doctor);
 	}
@@ -57,5 +71,17 @@ public class ServicesAux {
 	public void createClinic(Clinica c){
 		clinicaRep.save(c);
 	}
+
+	public void createTrabajo(Trabajo t){
+		trabajoRep.save(t);
+	}
+
+	public Object getAllProductos() {
+		return productoRepository.findAll();
+	}
+
+    public void createProduct(@Valid Producto p) {
+		productoRepository.save(p);
+    }
     
 }
