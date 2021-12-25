@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.model.Trabajo;
 public interface ProductoRepository extends CrudRepository<Producto, Integer>{
     List<Producto> findAll();
 
-    @Query(nativeQuery = true, value = "SELECT p FROM Producto p JOIN trabajos_productos tp WHERE p.id = tp.producto_id AND tp.trabajo_id = ?1")
+    @Query(nativeQuery = true, value = "SELECT p.* FROM Producto p JOIN trabajos_productos tp WHERE p.id = tp.productos_id AND tp.trabajo_id = ?1")
     List<Producto> findAllByTrabajo(Trabajo t);
+
 }

@@ -4,22 +4,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="petmaterial" tagdir="/WEB-INF/tags" %>
 
 
-<petclinic:layout pageName="user">
+<petmaterial:layout pageName="user">
 
     <h2>Materiales</h2>
 
     <table id="userTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 14%;">Nombre</th>
-            <th style="width: 14%;">Codigo</th>
-            <th style="width: 14%;">Marca de fabricante</th>
-            <th style="width: 14%;">Numero de lote</th>
-            <th style="width: 14%;">Categoria</th>
-            <th style="width: 14%;">Proveedores</th>
+            <th>Nombre</th>
+            <th>Codigo</th>
+            <th>Marca de fabricante</th>
+            <th>Numero de lote</th>
+            <th>Categoria</th>
+            <th>Proveedores</th>
             
             
         </tr>
@@ -45,7 +45,18 @@
                 	<a href="/materials/${material.id}/suppliers">
                 	<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
                 	</a>
-                </td>                
+                </td>
+                <td>
+                	<a href="/materials/${material.id}/edit">
+                	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                	</a>
+                </td>
+                <td>
+                	<a href="/materials/${material.id}/delete">
+                	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                	</a>
+                </td>
+                <td>                  
             </tr>
             
             
@@ -55,4 +66,4 @@
     <p>
     	<a href="/materials/new" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Añadir material</a>
     </p>
-</petclinic:layout>
+</petmaterial:layout>

@@ -4,25 +4,24 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="petlaboratory" tagdir="/WEB-INF/tags" %>
 
 
-<petclinic:layout pageName="user">
+<petlaboratory:layout pageName="laboratory">
 
 <div th:if="${message}" th:text="${message}"/>
 
     <h2>Laboratorios</h2>
 
-    <table id="userTable" class="table table-striped">
+    <table id="laboratoryTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 10%;">Nombre</th>
-            <th style="width: 10%;">Direccion</th>
-            <th style="width: 10%;">Localidad</th>
-            <th style="width: 10%x;">Codigo</th>
-            <th style="width: 10%;">Tarifa</th>
-            <th style="width: 10%;">Telefono</th>
-            <th style="width: 10%;">Email</th>
+            <th>Nombre</th>
+            <th>Direccion</th>
+            <th>Localidad</th>
+            <th>Tarifa</th>
+            <th>Telefono</th>
+            <th>Email</th>
             
             
         </tr>
@@ -39,9 +38,6 @@
                     <c:out value="${laboratory.localidad}"/>
                 </td>
                 <td>
-                    <c:out value="${laboratory.codigo}"/>
-                </td>
-                <td>
                     <c:out value="${laboratory.tarifa}"/>
                 </td>
                 <td>
@@ -51,23 +47,15 @@
                     <c:out value="${laboratory.email}"/>
                 </td>
                 <td>
-                <!--  
-                <td>
-                	<a href="/users/${user.id}/edit">
+                	<a href="/clients/laboratories/${laboratory.id}/edit">
                 	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 	</a>
                 </td>
                 <td>
-                	<a href="/users/${user.id}/delete">
+                	<a href="/clients/laboratories/${laboratory.id}/delete">
                 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 	</a>
-                </td>
-                <td>
-                	<a href="/users/${user.id}/details">
-                	<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                	</a>
-                </td>    
-                -->                  
+                </td>         
             </tr>
             
             
@@ -77,4 +65,4 @@
     <p>
     	<a href="/clients/laboratories/new" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Añadir laboratorio</a>
     </p>
-</petclinic:layout>
+</petlaboratory:layout>

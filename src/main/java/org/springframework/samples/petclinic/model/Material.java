@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import lombok.Getter;
@@ -22,6 +25,7 @@ public class Material extends BaseEntity{
     @ManyToOne
     CategoriaMaterial categoria;
 
-    //PROVEEDOR
+    @ManyToMany
+    List<Proveedor> proveedores;
     
 }

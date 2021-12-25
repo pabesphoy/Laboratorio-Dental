@@ -9,55 +9,43 @@
 
 <petclinic:layout pageName="user">
 
-<div th:if="${message}" th:text="${message}"/>
-
-    <h2>Trabajos</h2>
+    <h2>Productos del trabajo de doctor(a) <c:out value="${doctor.nombre}"></c:out> para paciente <c:out value="${patient.nombre}"></c:out></h2>
 
     <table id="userTable" class="table table-striped">
         <thead>
         <tr>
-            <th>Clinica</th>
-            <th>Doctor</th>
-            <th>Laboratorio</th>
-            <th>Paciente</th>
-            <th>Ver productos</th>
+            <th >Nombre</th>
+            <th >Unidades</th>
+            <th >Precio por unidad</th>
+            <th >Descuento</th>
         </tr>
          </thead>
         <tbody>
-        <c:forEach items="${works}" var="work">
-            <tr>
+        <c:forEach items="${productsworks}" var="productwork">
                 <td>
-                    <c:out value="${work.clinica.nombre}"/>
+                    <c:out value="${productwork.producto.nombre}"/>
                 </td>
                 <td>
-                    <c:out value="${work.doctor.nombre}"/>
+                    <c:out value="${productwork.unidades}"/>
                 </td>
                 <td>
-                    <c:out value="${work.laboratorio.nombre}"/>
+                    <c:out value="${productwork.precioPorUnidad}"/>
                 </td>
                 <td>
-                    <c:out value="${work.paciente.nombre}"/>
+                    <c:out value="${productwork.descuento}"/>
                 </td>
                 <td>
-                	<a href="/works/${work.id}/products">
-                	<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                	</a>
-                </td>
-                <td>
-                	<a href="/works/${work.id}/edit">
+                	<a href="products/${productwork.id}/edit">
                 	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 	</a>
                 </td>
                 <td>
-                	<a href="/works/${work.id}/delete">
+                	<a href="products/${productwork.id}/delete">
                 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 	</a>
-                </td>   
-            </tr>
+                </td>
+                <td>  
         </c:forEach>
         </tbody>
     </table>
-    <p>
-    	<a href="/works/new" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Añadir trabajo</a>
-    </p>
 </petclinic:layout>

@@ -15,22 +15,35 @@
     <table id="userTable" class="table table-striped">
         <thead>
             <tr>
-                <th style="width: 33%;">Nombre</th>
-                <th style="width: 33%;">Direccion</th>
-                <th style="width: 33%;">DNI</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>DNI</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach items="${proveedores}" var="proveedor">
-                <td>
-                    <c:out value="${proveedor.nombre}" />
-                </td>
-                <td>
-                    <c:out value="${proveedor.direccion}" />
-                </td>
-                <td>
-                    <c:out value="${proveedor.DNI}" />
-                </td>
+                <tr>
+
+                    <td>
+                        <c:out value="${proveedor.nombre}" />
+                    </td>
+                    <td>
+                        <c:out value="${proveedor.direccion}" />
+                    </td>
+                    <td>
+                        <c:out value="${proveedor.DNI}" />
+                    </td>
+                    <td>
+                        <a href="/suppliers/${proveedor.id}/edit">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/suppliers/${proveedor.id}/delete">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </a>
+                    </td>   
+            </tr>
             </c:forEach>
         </tbody>
     </table>

@@ -14,13 +14,13 @@
     <table id="userTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 14%;">Nombre</th>
-            <th style="width: 14%;">Codigo</th>
-            <th style="width: 14%;">Precio base</th>
-            <th style="width: 14%;">IVA</th>
-            <th style="width: 14%;">Categoria</th>
-            <th style="width: 14%;">Color</th>
-            <th style="width: 14%;">Materiales</th>
+            <th>Nombre</th>
+            <th>Codigo</th>
+            <th>Precio base</th>
+            <th>IVA</th>
+            <th>Categoria</th>
+            <th>Color</th>
+            <th>Materiales</th>
             
             
         </tr>
@@ -48,6 +48,16 @@
                 <td>
                 	<a href="/products/${product.id}/materials">
                 	<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                	</a>
+                </td>
+                <td>
+                	<a href="/products/${product.id}/edit">
+                	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                	</a>
+                </td>
+                <td>
+                	<a href="/products/${product.id}/delete">
+                	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 	</a>
                 </td>                
             </tr>

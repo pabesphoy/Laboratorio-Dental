@@ -16,13 +16,12 @@
     <table id="userTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 10%;">Nombre</th>
-            <th style="width: 10%;">Direccion</th>
-            <th style="width: 10%;">Localidad</th>
-            <th style="width: 10%x;">Codigo</th>
-            <th style="width: 10%;">Tarifa</th>
-            <th style="width: 10%;">Telefono</th>
-            <th style="width: 10%;">Email</th>
+            <th>Nombre</th>
+            <th>Direccion</th>
+            <th>Localidad</th>
+            <th>Tarifa</th>
+            <th>Telefono</th>
+            <th>Email</th>
             
             
         </tr>
@@ -39,9 +38,6 @@
                     <c:out value="${clinic.localidad}"/>
                 </td>
                 <td>
-                    <c:out value="${clinic.codigo}"/>
-                </td>
-                <td>
                     <c:out value="${clinic.tarifa}"/>
                 </td>
                 <td>
@@ -50,23 +46,16 @@
                 <td>
                     <c:out value="${clinic.email}"/>
                 </td>
-                <!--  
                 <td>
-                	<a href="/users/${user.id}/edit">
+                	<a href="/clients/clinics/${clinic.id}/edit">
                 	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 	</a>
                 </td>
                 <td>
-                	<a href="/users/${user.id}/delete">
+                	<a href="/clients/clinics/${clinic.id}/delete">
                 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 	</a>
-                </td>
-                <td>
-                	<a href="/users/${user.id}/details">
-                	<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                	</a>
-                </td>    
-                -->                  
+                </td>                 
             </tr>
             
             

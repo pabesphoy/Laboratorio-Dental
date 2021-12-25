@@ -19,8 +19,6 @@ public class Cliente {
 	
 	String localidad;
 	
-	String codigo;
-	
 	Double tarifa;
 	
 	String telefono;

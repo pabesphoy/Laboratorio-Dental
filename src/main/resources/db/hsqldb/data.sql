@@ -63,3 +63,27 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+
+INSERT INTO doctor(id, nombre) VALUES (1, 'Roque Pozanco');
+INSERT INTO doctor(id, nombre) VALUES (2, 'Lorena Sánchez');
+INSERT INTO doctor(id, nombre) VALUES (3, 'Álvaro Casasola');
+
+INSERT INTO clinica(id, nombre) VALUES (1,'Centro Dental Gil Castillo');
+INSERT INTO clinica(id, nombre) VALUES (2,'Clínica Universal');
+INSERT INTO clinica(id, nombre) VALUES (3,'Clínica Pozanco');
+
+INSERT INTO laboratorio(id, nombre) VALUES (1,'Laboratorio Dentales Beticos');
+
+INSERT INTO paciente(id, nombre, direccion, localidad, tarifa, telefono, email, DNI) VALUES (1, 'Pablo Espada', 'Urbanización Montepaloma, 84', 'Algeciras', 0.5, '619387402', 'pabloespadahoyo@gmail.com', '77015897Y');
+
+INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(1,3);
+INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(2,1);
+INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,1);
+INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,2);
+INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,3);
+
+
+
+
+INSERT INTO producto(id, nombre, precio_base, IVA) VALUES (1, 'Corona metalcerámica', 72.0, 0.0);
+INSERT INTO producto(id, nombre, precio_base, IVA) VALUES (2, 'Puente metalcerámica', 75.0, 0.0);
