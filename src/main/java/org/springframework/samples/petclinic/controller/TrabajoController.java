@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Producto;
 import org.springframework.samples.petclinic.model.Trabajo;
 import org.springframework.samples.petclinic.model.TrabajosProductos;
 import org.springframework.samples.petclinic.service.ServicesAux;
@@ -24,7 +25,8 @@ public class TrabajoController {
 
     private static final String VIEW_LIST_TRABAJOS = "trabajos/listTrabajos";
     private static final String VIEW_CREATE_TRABAJOS = "trabajos/createTrabajos";
-    private static final String VIEW_LIST_PRODUCTS_OF_WORK = "products/listProductosDeTrabajo";
+    private static final String VIEW_LIST_PRODUCTS_OF_WORK = "trabajos/listProductosDeTrabajo";
+    private static final String VIEW_CREATE_TRABAJOS_PRODUCTOS = "trabajos/createProductosDeTrabajo";
     
     @Autowired
     ServicesAux service;
@@ -77,13 +79,53 @@ public class TrabajoController {
     @GetMapping("/{workId}/products")
     public String listProductsOfWork(ModelMap model, @PathVariable("workId") Integer workId){
         Trabajo trabajo = service.getTrabajoById(workId);
+        List<Producto> productos = service.getAllProductosOf(trabajo);
+        List<TrabajosProductos> trabajosProductos = new ArrayList<>();
+        productos.stream().forEach(producto -> {
+            trabajosProductos.add(service.getTrabajosProductosByTrabajosAndProductos(trabajo, producto));
+        });
+        model.addAttribute("work", trabajo);
         model.addAttribute("patient", trabajo.getPaciente());
         model.addAttribute("doctor", trabajo.getDoctor());
         model.addAttribute("clinica", trabajo.getClinica());
-        model.addAttribute("productsworks", service.getAllProductosWorksOf(trabajo));
+        model.addAttribute("productsworks", trabajosProductos);
+        model.addAttribute("productos", productos);
 
         return VIEW_LIST_PRODUCTS_OF_WORK;
     }
+
+    @GetMapping("/{workId}/products/new")
+    public String initWorkProduct(ModelMap model, @PathVariable("workId")Integer workId) {
+        TrabajosProductos trabajosProductos = new TrabajosProductos();
+        model.addAttribute("trabajosProductos", trabajosProductos);
+    	model.addAttribute("trabajo", service.getTrabajoById(workId));
+        model.addAttribute("productos", service.getAllProductos());
+    	return VIEW_CREATE_TRABAJOS_PRODUCTOS;
+    }
+    
+
+    @PostMapping("/{workId}/products/new")
+    public String createWorkProduct(@PathVariable("workId")Integer workId, RedirectAttributes redirect, @Valid TrabajosProductos tp, 
+        BindingResult result, ModelMap model) {
+
+        if(result.hasErrors()){
+            model.addAttribute("message", "Error al crear");
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            return initWorkProduct(model, workId);
+        }else{
+
+            if(service.getTrabajoById(workId).getProductos().contains(tp.getProducto())){
+                model.addAttribute("message", "Este producto ya está en este trabajo");
+                return listProductsOfWork(model, workId);
+            }
+
+            service.addTrabajoToProducto(service.getTrabajoById(workId), tp.getProducto(), tp.getUnidades(), tp.getPrecioPorUnidad(), tp.getDescuento());
+
+            return listProductsOfWork(model, workId);
+         
+        }
+    }
+
 
     @GetMapping("/{workId}/products/{pwId}/delete")
     public String deleteProductsOfWork(ModelMap model, @PathVariable("workId") Integer workId, @PathVariable("pwId") Integer pwId){
@@ -94,7 +136,14 @@ public class TrabajoController {
             model.addAttribute("message", "No se puede desasignar ese producto de este trabajo, compruebe si ya ha sido eliminado");
             return listProductsOfWork(model, workId);
         }
-        service.deleteTrabajosProductos(tp);
+        try {
+            service.deleteTrabajosProductos(tp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Error al desasignar producto");
+            return listProductsOfWork(model, workId);
+        }
+        
         model.addAttribute("message", "Producto retirado de este trabajo");
         return listProductsOfWork(model, workId);
     }

@@ -22,8 +22,9 @@
          </thead>
         <tbody>
         <c:forEach items="${productsworks}" var="productwork">
+            <tr>
                 <td>
-                    <c:out value="${productwork.producto.nombre}"/>
+                    <c:out value="${productwork}"/>
                 </td>
                 <td>
                     <c:out value="${productwork.unidades}"/>
@@ -35,17 +36,20 @@
                     <c:out value="${productwork.descuento}"/>
                 </td>
                 <td>
-                	<a href="products/${productwork.id}/edit">
+                	<a href="/works/${work.id}/products/${productwork.id}/edit">
                 	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 	</a>
                 </td>
                 <td>
-                	<a href="products/${productwork.id}/delete">
+                	<a href="/works/${work.id}/products/${productwork.id}/delete">
                 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 	</a>
                 </td>
-                <td>  
+            </tr>
         </c:forEach>
         </tbody>
     </table>
+    <p>
+    	<a href="/works/${work.id}/products/new" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Añadir producto a este trabajo</a>
+    </p>
 </petclinic:layout>

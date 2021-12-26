@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 import java.util.Collection;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,10 @@ public class ServicesAux {
         return trabajoRep.findById(workId).orElse(null);
     }
 
+	public Trabajo getTrabajoByTrabajosProductos(TrabajosProductos tp){
+		return trabajoRep.findTrabajoByTrabajosProductos(tp).orElse(null);
+	}
+
 	public List<TrabajosProductos> getAllProductosWorksOf(Trabajo trabajo) {
 		return trabajosProductosRepository.findAllByTrabajo(trabajo);
 	}
@@ -106,9 +111,16 @@ public class ServicesAux {
 	public List<Producto> getAllProductosOf(Trabajo t) {
 		return productoRepository.findAllByTrabajo(t);
 	}
+	public Producto getProductoByTrabajosProductos(TrabajosProductos tp){
+		return productoRepository.findProductoByTrabajosProductos(tp).orElse(null);
+	}
 
 	public TrabajosProductos getTrabajoProductoById(Integer id){
 		return trabajosProductosRepository.findById(id).orElse(null);
+	}
+
+	public TrabajosProductos getTrabajosProductosByTrabajosAndProductos(Trabajo trabajo, Producto producto){
+		return trabajosProductosRepository.findByTrabajoAndProducto(trabajo, producto).orElse(null);
 	}
 
 	public List<Material> getAllMateriales() {
@@ -131,6 +143,7 @@ public class ServicesAux {
 		return proveedorRepo.findById(id).orElse(null);
 	}
 
+
 	//----------------------CREATE--------------------------------------
 
 	public void createDoctor(Doctor doctor){
@@ -149,9 +162,11 @@ public class ServicesAux {
 		clinicaRep.save(c);
 	}
 
-	public void createTrabajo(Trabajo t){
+	public void createTrabajo(@Valid Trabajo t){
 		trabajoRep.save(t);
 	}
+
+	
 
 	public void createProduct(@Valid Producto p) {
 		productoRepository.save(p);
@@ -164,44 +179,63 @@ public class ServicesAux {
 		proveedorRepo.save(p);
 	}
 
+	public void createTrabajosProductos(@Valid TrabajosProductos tp) {
+		trabajosProductosRepository.save(tp);
+    }
+
 
 	//----------------------DELETE--------------------------------------
+
+	@Transactional
 	public void deleteDoctor(Doctor doctor){
 		doctorRep.delete(doctor);
 	}
 
+	@Transactional
 	public void deleteLaboratorio(Laboratorio lab){
 		laboratorioRep.delete(lab);
 	}
 
+	@Transactional
 	public void deletePaciente(Paciente p){
 		pacienteRep.delete(p);
-	}
+	}		
 
+	@Transactional
 	public void deleteClinic(Clinica c){
 		clinicaRep.delete(c);
 	}
 	
+	@Transactional
 	public void deleteTrabajo(Trabajo t){
 		trabajoRep.delete(t);
 	}
 
+	@Transactional
 	public void deleteProduct(Producto p){
 		productoRepository.delete(p);
 	}
 
+	@Transactional
 	public void deleteTrabajosProductos(TrabajosProductos tp){
-		trabajosProductosRepository.delete(tp);
+		trabajosProductosRepository.deleteProductoFromTrabajo(tp);
 	}
 
+
+	@Transactional
 	public void deleteMaterial(Material m){
 		materialRepo.delete(m);
 	}
 
+	@Transactional
 	public void deleteProveedor(Proveedor p){
 		proveedorRepo.delete(p);
 	}
+    
+	//-----------------INSERTS-------------------
 
-    
-    
+	@Transactional
+	public void addTrabajoToProducto(Trabajo t, Producto p, Integer unidades, Double precioPorUnidad, Double descuento){
+		trabajosProductosRepository.addProductoToTrabajo(t, p, unidades, precioPorUnidad, descuento);
+	}
 }

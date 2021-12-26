@@ -28,13 +28,6 @@ public class Trabajo extends BaseEntity{
 
     @ManyToOne
     Paciente paciente;
-    /*
-    @ManyToMany
-	@JoinTable(name = "games_markets",
-		joinColumns = {@JoinColumn(name = "fk_game")},
-		inverseJoinColumns = {@JoinColumn(name = "fk_market")})
-	private List<MarketCard> items;		
-    */
 
     @ManyToMany
     @JoinTable(name = "trabajos_productos",

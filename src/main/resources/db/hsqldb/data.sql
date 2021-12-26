@@ -82,8 +82,7 @@ INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,1);
 INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,2);
 INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,3);
 
-
-
+INSERT INTO trabajo(id, paciente_id, clinica_id, doctor_id, laboratorio_id) VALUES (1, 1, 1, 1, null);
 
 INSERT INTO producto(id, nombre, precio_base, IVA) VALUES (1, 'Corona metalcerámica', 72.0, 0.0);
 INSERT INTO producto(id, nombre, precio_base, IVA) VALUES (2, 'Puente metalcerámica', 75.0, 0.0);
