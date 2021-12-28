@@ -58,9 +58,16 @@ public class TrabajoController {
         }
             
         else{
-            service.createTrabajo(t);
-            model.addAttribute("message", "Creación completada");
-            return "redirect:/works";
+
+            if(t.getClinica().getDoctores().contains(t.getDoctor())){
+                service.createTrabajo(t);
+                model.addAttribute("message", "Creación completada");
+                return "redirect:/works";
+            }else{
+                model.addAttribute("message", "El doctor seleccionado no pertenece a esta clínica");
+                return initWork(model);
+            }
+            
         }
     }
 

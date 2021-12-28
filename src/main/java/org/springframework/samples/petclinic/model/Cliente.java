@@ -8,10 +8,7 @@ import lombok.*;
 
 @MappedSuperclass
 @Getter @Setter
-public class Cliente {
-	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO) 
-	Integer id;
+public class Cliente extends BaseEntity{
 	
 	String nombre;
 	

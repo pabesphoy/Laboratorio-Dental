@@ -4,14 +4,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="petdoctor" tagdir="/WEB-INF/tags" %>
 
 
-<petclinic:layout pageName="user">
+<petdoctor:layout pageName="user">
 
 <div th:if="${message}" th:text="${message}"/>
 
-    <h2>Clinicas</h2>
+    <h2>Doctores de la clínica <c:out value = "${clinica.nombre}"></c:out></h2>
 
     <table id="userTable" class="table table-striped">
         <thead>
@@ -22,45 +22,44 @@
             <th>Tarifa</th>
             <th>Telefono</th>
             <th>Email</th>
+            <th>Numero de colegiado</th>
+            <th>DNI</th>
             
             
         </tr>
          </thead>
         <tbody>
-        <c:forEach items="${clinics}" var="clinic">
+        <c:forEach items="${doctors}" var="doctor">
                 <td>
-                    <c:out value="${clinic.nombre}"/>
+                    <c:out value="${doctor.nombre}"/>
                 </td>
                 <td>
-                    <c:out value="${clinic.direccion}"/>
+                    <c:out value="${doctor.direccion}"/>
                 </td>
                 <td>
-                    <c:out value="${clinic.localidad}"/>
+                    <c:out value="${doctor.localidad}"/>
                 </td>
                 <td>
-                    <c:out value="${clinic.tarifa}"/>
+                    <c:out value="${doctor.tarifa}"/>
                 </td>
                 <td>
-                    <c:out value="${clinic.telefono}"/>
+                    <c:out value="${doctor.telefono}"/>
                 </td>
                 <td>
-                    <c:out value="${clinic.email}"/>
+                    <c:out value="${doctor.email}"/>
                 </td>
                 <td>
-                	<a href="/clients/clinics/${clinic.id}/doctors">
-                	<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                	</a>
+                    <c:out value="${doctor.numeroColegiado}"/>
                 </td>
                 <td>
-                	<a href="/clients/clinics/${clinic.id}/edit">
-                	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                	</a>
+                    <c:out value="${doctor.DNI}"/>
                 </td>
                 <td>
-                	<a href="/clients/clinics/${clinic.id}/delete">
+                	<a href="/clients/clinics/${clinica.id}/doctors/${doctor.id}/delete">
                 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 	</a>
-                </td>                 
+                </td>
+                <td>                
             </tr>
             
             
@@ -68,6 +67,6 @@
         </tbody>
     </table>
     <p>
-    	<a href="/clients/clinics/new" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Añadir clinica</a>
+    	<a href="/clients/clinics/${clinica.id}/doctors/new" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Añadir doctor a la clínica</a>
     </p>
-</petclinic:layout>
+</petdoctor:layout>

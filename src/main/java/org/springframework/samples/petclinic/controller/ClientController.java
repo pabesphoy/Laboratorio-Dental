@@ -1,5 +1,8 @@
 package org.springframework.samples.petclinic.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -25,10 +30,13 @@ public class ClientController {
     public static final String VIEW_LIST_PACIENTES = "clients/listPatients";
     public static final String VIEW_LIST_CLINICAS = "clients/listClinics";
     public static final String VIEW_LIST_LABORATORIOS = "clients/listLaboratories";
+    public static final String VIEW_LIST_DOCTORES_OF_CLINIC = "clients/listDoctorsOfClinic";
     public static final String VIEW_CREATE_DOCTORES = "clients/createDoctors";
     public static final String VIEW_CREATE_PACIENTES = "clients/createPatients";
     public static final String VIEW_CREATE_CLINICAS = "clients/createClinics";
     public static final String VIEW_CREATE_LABORATORIOS = "clients/createLaboratories";
+    public static final String VIEW_CREATE_DOCTOR_OF_CLINIC = "clients/createDoctorOfClinic";
+    
 
 
     @Autowired
@@ -98,6 +106,59 @@ public class ClientController {
             model.addAttribute("message", "Creación completada");
             return listClinics(model);
         }
+    }
+
+
+    @GetMapping("/clinics/{clinicId}/doctors")
+    public String listDoctorsOfClinic(ModelMap model, @PathVariable("clinicId") Integer id){
+        Clinica clinica = service.getClinicaById(id);
+        model.addAttribute("doctors", service.getDoctorsOfClinic(clinica));
+        model.addAttribute("clinica", clinica);
+        return VIEW_LIST_DOCTORES_OF_CLINIC;
+    }
+
+    @GetMapping("/clinics/{clinicId}/doctors/new")
+    public String createDoctorOfClinic(ModelMap model, @PathVariable("clinicId") Integer id){
+        Clinica clinica = service.getClinicaById(id);
+        List<Doctor> doctors = service.getAllDoctors();
+        doctors.removeAll(clinica.getDoctores());
+
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("clinica", clinica);
+
+        return VIEW_CREATE_DOCTOR_OF_CLINIC;
+    }
+
+    @RequestMapping(value = "/clinics/{clinicId}/doctors/new", method = RequestMethod.POST)
+    public String createDoctorOfClinic(ModelMap model, @RequestParam("doctor") Integer doctorId, HttpServletResponse response, @PathVariable("clinicId") Integer clinicId){
+
+        Doctor doctor = service.getDoctorById(doctorId);
+        Clinica clinica = service.getClinicaById(clinicId);
+
+        if(clinica.getDoctores().contains(doctor)){
+            model.addAttribute("message", "Esta clínica ya contiene a este doctor. Compruebe si el doctor está añadido ya.");
+            return listDoctorsOfClinic(model, clinicId);
+        }
+        
+        model.addAttribute("message", "Doctor añadido");
+        clinica.getDoctores().add(doctor);
+        service.createClinic(clinica);
+        return listDoctorsOfClinic(model, clinicId);
+    }
+    
+
+    @GetMapping("/clinics/{clinicaId}/doctors/{doctorId}/delete")
+    public String deleteDoctorOfClinic(ModelMap model, @PathVariable("clinicaId") Integer clinicId, @PathVariable("doctorId") Integer doctorId){
+        Clinica clinica = service.getClinicaById(clinicId);
+        Doctor doctor = service.getDoctorById(doctorId);
+        if(!clinica.getDoctores().contains(doctor)){
+            model.addAttribute("message", "Doctor no encontrado en esta clínica, compruebe si ya ha sido retirado");
+        }else{
+            service.deleteDoctorFromClinic(clinica, doctor);
+            model.addAttribute("message", "Doctor retirado de la clínica");
+        }
+
+        return listDoctorsOfClinic(model, clinicId);
     }
 
     @GetMapping("/laboratories/new")

@@ -59,6 +59,10 @@ public class ServicesAux {
 		return doctorRep.findById(id).orElse(null);
 	}
 
+	public List<Doctor> getDoctorsOfClinic(Clinica clinicaById) {
+        return doctorRep.findAllByClinic(clinicaById);
+    }
+
 	public Collection<Laboratorio> getAllLaboratories() {
 		return laboratorioRep.findAll();
 	}
@@ -106,7 +110,6 @@ public class ServicesAux {
 	public Producto getProductoById(Integer id) {
 		return productoRepository.findById(id).orElse(null);
 	}
-
 
 	public List<Producto> getAllProductosOf(Trabajo t) {
 		return productoRepository.findAllByTrabajo(t);
@@ -231,6 +234,12 @@ public class ServicesAux {
 	public void deleteProveedor(Proveedor p){
 		proveedorRepo.delete(p);
 	}
+
+	public void deleteDoctorFromClinic(Clinica clinica, Doctor doctor) {
+		
+		clinica.getDoctores().remove(doctor);
+		clinicaRep.save(clinica);
+    }
     
 	//-----------------INSERTS-------------------
 
@@ -238,4 +247,8 @@ public class ServicesAux {
 	public void addTrabajoToProducto(Trabajo t, Producto p, Integer unidades, Double precioPorUnidad, Double descuento){
 		trabajosProductosRepository.addProductoToTrabajo(t, p, unidades, precioPorUnidad, descuento);
 	}
+
+    
+
+    
 }

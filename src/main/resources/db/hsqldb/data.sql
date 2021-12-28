@@ -76,11 +76,11 @@ INSERT INTO laboratorio(id, nombre) VALUES (1,'Laboratorio Dentales Beticos');
 
 INSERT INTO paciente(id, nombre, direccion, localidad, tarifa, telefono, email, DNI) VALUES (1, 'Pablo Espada', 'Urbanización Montepaloma, 84', 'Algeciras', 0.5, '619387402', 'pabloespadahoyo@gmail.com', '77015897Y');
 
-INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(1,3);
-INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(2,1);
-INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,1);
-INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,2);
-INSERT INTO doctor_clinica(doctor_id, clinica_id) VALUES(3,3);
+INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(1,3);
+INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(2,1);
+INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(3,1);
+INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(3,2);
+INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(3,3);
 
 INSERT INTO trabajo(id, paciente_id, clinica_id, doctor_id, laboratorio_id) VALUES (1, 1, 1, 1, null);
 
