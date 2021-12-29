@@ -12,7 +12,7 @@
     </h2>
     <form:form method="POST" modelAttribute="trabajo" class="form-horizontal" id="add-owner-form">
         
-        <label for="clinica" style="margin-left: 1.9%; margin-top: 1%;">Clinica/Laboratorio</label>
+        <label for="clinica" style="margin-left: 9.5%; margin-top: 1%;">Clinica</label>
         <select class="form-select" aria-label="Clinica" name="clinica" style="margin-left: 2.7%; width: 82.7%; font-size: large;">
             <c:forEach items="${clinicas}" var="clinica">
                     <option value="${clinica.id}"><c:out value="${clinica.nombre}"></c:out></option>

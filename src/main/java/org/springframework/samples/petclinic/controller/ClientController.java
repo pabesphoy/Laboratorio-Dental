@@ -182,6 +182,22 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/laboratories/{id}/delete")
+    public String createLaboratory(@PathVariable("id") Integer id, ModelMap model){
+        Laboratorio laboratorio = service.getLaboratoryById(id);
+        if(laboratorio == null){
+            model.addAttribute("message", "Laboratorio no encontrado. Compruebe si ya se ha eliminado.");
+            return listLaboratories(model);
+        }else if(service.getAllTrabajosByLaboratorio(laboratorio).size() != 0){
+            model.addAttribute("message", "Este laboratorio tiene trabajos asociados. Elimínelos antes de eliminar este laboratorio");
+            return listLaboratories(model);
+        }else{
+            service.deleteLaboratorio(laboratorio);
+            model.addAttribute("message", "Laboratorio eliminado");
+            return listLaboratories(model);
+        }
+    }
+
     @GetMapping("/patients/new")
     public String initPatient(ModelMap model) {
     	Paciente patient = new Paciente();

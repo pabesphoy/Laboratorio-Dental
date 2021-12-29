@@ -1,7 +1,9 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -193,6 +195,10 @@ public class ServicesAux {
 		return categoriasMaterialesRepository.findById(id).orElse(null);
 	}
 
+	public List<Trabajo> getAllTrabajosByLaboratorio(Laboratorio laboratorio) {
+        return this.getAllTrabajos().stream().filter(t -> t.getLaboratorio() == laboratorio).collect(Collectors.toList());
+    }
+
 
 	//----------------------CREATE--------------------------------------
 
@@ -326,6 +332,14 @@ public class ServicesAux {
 	public void addTrabajoToProducto(Trabajo t, Producto p, Integer unidades, Double precioPorUnidad, Double descuento){
 		trabajosProductosRepository.addProductoToTrabajo(t, p, unidades, precioPorUnidad, descuento);
 	}
+
+	//-----------------OTROS-------------------
+
+	public boolean perteneceDoctorAClinica(Doctor doctor, Clinica clinica){
+		return getDoctorsOfClinic(clinica).contains(doctor);
+	}
+
+    
 
     
 

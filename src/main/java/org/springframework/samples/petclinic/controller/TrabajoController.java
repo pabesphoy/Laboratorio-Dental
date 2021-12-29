@@ -2,9 +2,11 @@ package org.springframework.samples.petclinic.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Producto;
 import org.springframework.samples.petclinic.model.Trabajo;
@@ -40,34 +42,65 @@ public class TrabajoController {
     @GetMapping("/new")
     public String initWork(ModelMap model) {
         Trabajo trabajo = new Trabajo();
-        List<Object> organizacion = new ArrayList<>();
-        organizacion.addAll(service.getAllClinics());
-        organizacion.addAll(service.getAllLaboratories());
     	model.addAttribute("trabajo", trabajo);
         model.addAttribute("doctores", service.getAllDoctors());
         model.addAttribute("pacientes", service.getAllPatients());
-        model.addAttribute("clinicas", organizacion);
+        model.addAttribute("clinicas", service.getAllClinics());
     	return VIEW_CREATE_TRABAJOS;
     }
     @PostMapping("/new")
     public String createWork(RedirectAttributes redirect, @Valid Trabajo t,BindingResult result, ModelMap model){
+
+        System.out.println(t.getClinica().getNombre());
+
         if(result.hasErrors()){
             model.addAttribute("message", "Error al crear");
             result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
             return initWork(model);
-        }
-        else{
-            if(t.getClinica().getDoctores().contains(t.getDoctor())){
+        }else if((t.getClinica() == null && t.getLaboratorio() == null) || (t.getClinica() != null && t.getLaboratorio() != null)){
+            model.addAttribute("message", "La clínica o el laboratorio deben no ser nulos");
+            return initWork(model);
+        } else if(!t.getClinica().getDoctores().contains(t.getDoctor()) && t.getClinica() != null){
+                model.addAttribute("message", "El doctor seleccionado no pertenece a esta clínica");
+                return initWork(model);
+        }else{
                 service.createTrabajo(t);
                 model.addAttribute("message", "Creación completada");
                 return "redirect:/works";
-            }else{
-                model.addAttribute("message", "El doctor seleccionado no pertenece a esta clínica");
-                return initWork(model);
-            }
-            
         }
+            
+        
     }
+
+    @GetMapping("/{id}/edit")
+	public String editWork(ModelMap model, @PathVariable("id") int id) {
+		Trabajo trabajo = service.getTrabajoById(id);
+        if(trabajo != null) {
+			model.addAttribute("trabajo", trabajo);
+            model.addAttribute("doctores", service.getAllDoctors());
+            model.addAttribute("pacientes", service.getAllPatients());
+            model.addAttribute("clinicas", service.getAllClinics());
+            System.out.println(trabajo.getDoctor().getNombre());
+			return VIEW_CREATE_TRABAJOS;
+		} else {
+			model.addAttribute("message", "Este trabajo no existe");
+			return listTrabajos(model);
+		}
+	}
+
+    @PostMapping("/{id}/edit")
+	public String editWork(RedirectAttributes redirect, ModelMap model, @PathVariable("id") int id, @Valid Trabajo modifiedTrabajo, BindingResult result) {
+		Trabajo trabajo = service.getTrabajoById(id);
+		if(result.hasErrors()) {
+			model.addAttribute("message", "The enemy has errors");
+			return VIEW_CREATE_TRABAJOS;
+		} else {
+			BeanUtils.copyProperties(modifiedTrabajo, trabajo, "id");
+            service.createTrabajo(modifiedTrabajo);
+			model.addAttribute("trabajo", trabajo);
+			return "redirect:/works";
+		}
+	}
 
     @GetMapping("/{workId}/delete")
     public String deleteWork(ModelMap model, @PathVariable("workId") Integer id){

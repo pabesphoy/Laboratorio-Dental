@@ -136,6 +136,10 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
+					<petclinic:menuItem active="${name eq 'vets'}" url="/" title="Notificaciones">
+						<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+						<span>Notificaciones</span>
+					</petclinic:menuItem>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
