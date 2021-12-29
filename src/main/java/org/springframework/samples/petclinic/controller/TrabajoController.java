@@ -56,9 +56,7 @@ public class TrabajoController {
             result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
             return initWork(model);
         }
-            
         else{
-
             if(t.getClinica().getDoctores().contains(t.getDoctor())){
                 service.createTrabajo(t);
                 model.addAttribute("message", "Creación completada");

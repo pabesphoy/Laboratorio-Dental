@@ -7,7 +7,10 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.CategoriaMaterial;
+import org.springframework.samples.petclinic.model.CategoriaProducto;
 import org.springframework.samples.petclinic.model.Clinica;
+import org.springframework.samples.petclinic.model.Color;
 import org.springframework.samples.petclinic.model.Doctor;
 import org.springframework.samples.petclinic.model.Laboratorio;
 import org.springframework.samples.petclinic.model.Material;
@@ -16,7 +19,10 @@ import org.springframework.samples.petclinic.model.Producto;
 import org.springframework.samples.petclinic.model.Proveedor;
 import org.springframework.samples.petclinic.model.Trabajo;
 import org.springframework.samples.petclinic.model.TrabajosProductos;
+import org.springframework.samples.petclinic.repository.CategoriasMaterialesRepository;
+import org.springframework.samples.petclinic.repository.CategoriasProductosRepository;
 import org.springframework.samples.petclinic.repository.ClinicaRepository;
+import org.springframework.samples.petclinic.repository.ColorRepository;
 import org.springframework.samples.petclinic.repository.DoctorRepository;
 import org.springframework.samples.petclinic.repository.LaboratorioRepository;
 import org.springframework.samples.petclinic.repository.MaterialRepository;
@@ -32,22 +38,39 @@ public class ServicesAux {
 	
 	@Autowired 
 	DoctorRepository doctorRep;
+
 	@Autowired 
 	PacienteRepository pacienteRep;
+
 	@Autowired 
 	ClinicaRepository clinicaRep;
+
 	@Autowired 
 	LaboratorioRepository laboratorioRep;
+
 	@Autowired 
 	TrabajoRepository trabajoRep;
+
 	@Autowired 
 	ProductoRepository productoRepository;
+
 	@Autowired 
 	MaterialRepository materialRepo;
+
 	@Autowired
 	ProveedorRepository proveedorRepo;
+
 	@Autowired
 	TrabajosProductosRepository trabajosProductosRepository;
+
+	@Autowired
+	ColorRepository colorRepository;
+
+	@Autowired
+	CategoriasProductosRepository categoriaProductoRepository;
+
+	@Autowired
+	CategoriasMaterialesRepository categoriasMaterialesRepository;
 
 
 	//----------------------GETTERS--------------------------------------
@@ -146,6 +169,30 @@ public class ServicesAux {
 		return proveedorRepo.findById(id).orElse(null);
 	}
 
+	public List<Color> getAllColors(){
+		return colorRepository.findAll();
+	}
+
+	public Color getColorById(Integer id){
+		return colorRepository.findById(id).orElse(null);
+	}
+
+	public List<CategoriaProducto> getAllCategoriasProductos(){
+		return categoriaProductoRepository.findAll();
+	}
+
+	public CategoriaProducto getCategoriaProductosById(Integer id){
+		return categoriaProductoRepository.findById(id).orElse(null);
+	}
+
+	public List<CategoriaMaterial> getAllCategoriasMateriales(){
+		return categoriasMaterialesRepository.findAll();
+	}
+
+	public CategoriaMaterial getCategoriaMaterialById(Integer id){
+		return categoriasMaterialesRepository.findById(id).orElse(null);
+	}
+
 
 	//----------------------CREATE--------------------------------------
 
@@ -169,8 +216,6 @@ public class ServicesAux {
 		trabajoRep.save(t);
 	}
 
-	
-
 	public void createProduct(@Valid Producto p) {
 		productoRepository.save(p);
     }
@@ -186,6 +231,17 @@ public class ServicesAux {
 		trabajosProductosRepository.save(tp);
     }
 
+	public void createColor(@Valid Color color){
+		colorRepository.save(color);
+	}
+
+	public void createCategoriaProducto(@Valid CategoriaProducto categoriaProducto){
+		categoriaProductoRepository.save(categoriaProducto);
+	}
+	
+	public void createCategoriaMaterial(@Valid CategoriaMaterial categoriaMaterial){
+		categoriasMaterialesRepository.save(categoriaMaterial);
+	}
 
 	//----------------------DELETE--------------------------------------
 
@@ -236,10 +292,33 @@ public class ServicesAux {
 	}
 
 	public void deleteDoctorFromClinic(Clinica clinica, Doctor doctor) {
-		
 		clinica.getDoctores().remove(doctor);
 		clinicaRep.save(clinica);
     }
+
+	public void deleteColor(Color color){
+		colorRepository.delete(color);
+	}
+
+	public void deleteColorById(Integer colorId){
+		colorRepository.deleteById(colorId);
+	}
+
+	public void deleteCategoriaProducto(CategoriaProducto categoria){
+		categoriaProductoRepository.delete(categoria);
+	}
+
+	public void deleteCategoriaProductoById(Integer id){
+		categoriaProductoRepository.deleteById(id);
+	}
+
+	public void deleteCategoriaMaterial(CategoriaMaterial categoria){
+		categoriasMaterialesRepository.delete(categoria);
+	}
+
+	public void deleteCategoriaMaterialById(Integer id){
+		categoriasMaterialesRepository.deleteById(id);
+	}
     
 	//-----------------INSERTS-------------------
 

@@ -12,7 +12,11 @@ public class Color extends BaseEntity{
     
     String guiaColor;
 
-    String color; 
+    String colorName; 
 
     String codigo;
+
+    public String toString(){
+        return colorName;
+    }
 }

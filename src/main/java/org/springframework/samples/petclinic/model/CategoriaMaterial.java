@@ -13,4 +13,8 @@ public class CategoriaMaterial extends BaseEntity{
     String nombre;
 
     String codigo;
+
+    public String toString(){
+        return nombre;
+    }
 }

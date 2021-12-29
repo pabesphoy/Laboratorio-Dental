@@ -43,7 +43,7 @@
                     <c:out value="${product.categoria}"/>
                 </td>
                 <td>
-                    <c:out value="${product.color}"/>
+                    <c:out value="${product.color.colorName}"/>
                 </td>
                 <td>
                 	<a href="/products/${product.id}/materials">

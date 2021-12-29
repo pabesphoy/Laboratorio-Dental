@@ -80,11 +80,10 @@ public class ClientController {
             result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
             return initDoctor(model);
         }
-            
         else{
             service.createDoctor(doctor);
             model.addAttribute("message", "Creación completada");
-            return listDoctors(model);
+            return "redirect:/clients/doctors";
         }
     }
 
@@ -104,7 +103,7 @@ public class ClientController {
     }else{
             service.createClinic(clinic);
             model.addAttribute("message", "Creación completada");
-            return listClinics(model);
+            return "redirect:/clients/clinics";
         }
     }
 
@@ -173,7 +172,7 @@ public class ClientController {
         if(result.hasErrors()){
             model.addAttribute("message", "Error al crear");
             result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
-            return initLaboratory(model);
+            return "redirect:/clients/laboratories";
         }
             
         else{
@@ -201,7 +200,7 @@ public class ClientController {
         else{
             service.createPatient(p);
             model.addAttribute("message", "Creación completada");
-            return listPatients(model);
+            return "redirect:/clients/patients";
         }
     }
 

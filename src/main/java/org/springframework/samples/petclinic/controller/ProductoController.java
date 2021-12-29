@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.CategoriaProducto;
 import org.springframework.samples.petclinic.model.Producto;
 import org.springframework.samples.petclinic.service.ServicesAux;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class ProductoController {
 
     private static final String VIEW_LIST_PRODUCTOS = "products/listProductos";
     private static final String VIEW_CREATE_PRODUCTOS = "products/createProductos";
+
+    private static final String VIEW_LIST_CATEGORIAS_PRODUCTOS = "products/listCategoriaProductos";
+    private static final String VIEW_CREATE_CATEGORIA_PRODUCTOS = "products/createCategoriaProductos";
     
     @Autowired
     ServicesAux service;
@@ -34,6 +38,8 @@ public class ProductoController {
     public String initProduct(ModelMap model) {
         Producto p = new Producto();
     	model.addAttribute("product", p);
+        model.addAttribute("colores", service.getAllColors());
+        model.addAttribute("categorias", service.getAllCategoriasProductos());
     	return VIEW_CREATE_PRODUCTOS;
     }
     @PostMapping("/new")
@@ -47,7 +53,7 @@ public class ProductoController {
         else{
             service.createProduct(p);
             model.addAttribute("message", "Creación completada");
-            return listProductos(model);
+            return "redirect:";
         }
     }
 
@@ -64,5 +70,45 @@ public class ProductoController {
         return listProductos(model);
     }
 
+    @GetMapping("/categoriasProductos")
+    public String listCategoriasProductos(ModelMap model){
+
+        model.addAttribute("categorias", service.getAllCategoriasProductos());
+        return VIEW_LIST_CATEGORIAS_PRODUCTOS;
+    }
+
+    @GetMapping("/categoriasProductos/new")
+    public String initCategoriaProducto(ModelMap model) {
+        CategoriaProducto cat = new CategoriaProducto();
+    	model.addAttribute("categoria", cat);
+    	return VIEW_CREATE_CATEGORIA_PRODUCTOS;
+    }
+    @PostMapping("/categoriasProductos/new")
+    public String createCategoriaProducto(RedirectAttributes redirect, @Valid CategoriaProducto cat, BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            model.addAttribute("message", "Error al crear");
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            return initCategoriaProducto(model);
+        }
+            
+        else{
+            service.createCategoriaProducto(cat);
+            model.addAttribute("message", "Creación completada");
+            return "redirect:/products/categoriasProductos";
+        }
+    }
+
+    @GetMapping("/categoriasProductos/{categoriaProductoId}/delete")
+    public String deleteCategoriaProducto(ModelMap model, @PathVariable("categoriaProductoId") Integer id){
+        CategoriaProducto cat = service.getCategoriaProductosById(id);
+        if(cat == null){
+            model.addAttribute("message", "Categoria producto no encontrada, compruebe si ya ha sido borrada");
+            return listCategoriasProductos(model);
+        }
+
+        service.deleteCategoriaProducto(cat);
+        model.addAttribute("message", "Categoria eliminada");
+        return listCategoriasProductos(model);
+    }
     
 }

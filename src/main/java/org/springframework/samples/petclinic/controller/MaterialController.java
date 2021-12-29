@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.CategoriaMaterial;
 import org.springframework.samples.petclinic.model.Material;
 import org.springframework.samples.petclinic.service.ServicesAux;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class MaterialController {
 
     private static final String VIEW_LIST_MATERIALES = "materiales/listMateriales";
     private static final String VIEW_CREATE_MATERIALES = "materiales/createMateriales";
+
+    private static final String VIEW_LIST_CATEGORIAS_MATERIALES = "materiales/listCategoriasMateriales";
+    private static final String VIEW_CREATE_CATEGORIA_MATERIALES = "materiales/createCategoriaMateriales";
     
     @Autowired
     ServicesAux service;
@@ -42,7 +46,7 @@ public class MaterialController {
         if(result.hasErrors()){
             model.addAttribute("message", "Error al crear");
             result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
-            return initMaterial(model);
+            return "redirect:";
         }
             
         else{
@@ -63,6 +67,47 @@ public class MaterialController {
         service.deleteMaterial(m);
         model.addAttribute("message", "Material eliminado");
         return listMaterials(model);
+    }
+
+    @GetMapping("/categoriasMateriales")
+    public String listCategoriasMateriales(ModelMap model){
+
+        model.addAttribute("categorias", service.getAllCategoriasMateriales());
+        return VIEW_LIST_CATEGORIAS_MATERIALES;
+    }
+
+    @GetMapping("/categoriasMateriales/new")
+    public String initCategoriaMateriales(ModelMap model) {
+        CategoriaMaterial cat = new CategoriaMaterial();
+    	model.addAttribute("categoria", cat);
+    	return VIEW_CREATE_CATEGORIA_MATERIALES;
+    }
+    @PostMapping("/categoriasMateriales/new")
+    public String createCategoriaMateriales(RedirectAttributes redirect, @Valid CategoriaMaterial cat, BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            model.addAttribute("message", "Error al crear");
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            return initCategoriaMateriales(model);
+        }
+            
+        else{
+            service.createCategoriaMaterial(cat);
+            model.addAttribute("message", "Creación completada");
+            return "redirect:/materials/categoriasMateriales";
+        }
+    }
+
+    @GetMapping("/categoriasMateriales/{categoriaMaterialId}/delete")
+    public String deleteCategoriaMateriales(ModelMap model, @PathVariable("categoriaMaterialId") Integer id){
+        CategoriaMaterial cat = service.getCategoriaMaterialById(id);
+        if(cat == null){
+            model.addAttribute("message", "Categoria material no encontrada, compruebe si ya ha sido borrada");
+            return listCategoriasMateriales(model);
+        }
+
+        service.deleteCategoriaMaterial(cat);
+        model.addAttribute("message", "Categoria eliminada");
+        return listCategoriasMateriales(model);
     }
 
     

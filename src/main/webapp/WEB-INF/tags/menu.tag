@@ -27,7 +27,7 @@
 							<li>
 								<div class="row">
 									<div class="text-center">
-										<a href="<c:url value=" /clients/doctors" />">Doctores</a>
+										<a href="<c:url value="/clients/doctors"/>">Doctores</a>
 									</div>
 								</div>
 							</li>
@@ -35,7 +35,7 @@
 							<li>
 								<div class="row">
 									<div class="text-center">
-										<a href="<c:url value="/clients/clinics" />">Clinicas</a>
+										<a href="<c:url value="/clients/clinics"/>">Clinicas</a>
 									</div>
 								</div>
 							</li>
@@ -43,7 +43,7 @@
 							<li>
 								<div class="row">
 									<div class="text-center">
-										<a href="<c:url value=" /clients/laboratories" />">Laboratorios</a>
+										<a href="<c:url value="/clients/laboratories"/>">Laboratorios</a>
 									</div>
 								</div>
 							</li>
@@ -98,6 +98,36 @@
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Clientes</span>
 					</petclinic:menuItem>
+					<petclinic:menuItem active="${name eq 'vets'}" url="" title="Otros" dropdown="${true}">
+						<ul class="dropdown-menu">
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value="/colores"/>">Colores</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value="/products/categoriasProductos"/>">Categorias de productos</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="row">
+									<div class="text-center">
+										<a href="<c:url value="/materials/categoriasMateriales"/>">Categorias de materiales</a>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+						</ul>
+						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+						<span>Otros</span>
+					</petclinic:menuItem>
 
 			</ul>
 
@@ -106,8 +136,6 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"

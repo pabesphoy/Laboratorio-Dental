@@ -47,7 +47,7 @@ public class ProveedorController {
         else{
             service.createProveedor(p);
             model.addAttribute("message", "Creación completada");
-            return listProveedores(model);
+            return "redirect:";
         }
     }
 
