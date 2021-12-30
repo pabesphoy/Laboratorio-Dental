@@ -1,10 +1,12 @@
 package org.springframework.samples.petclinic.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.CategoriaMaterial;
 import org.springframework.samples.petclinic.model.Material;
+import org.springframework.samples.petclinic.model.Proveedor;
 import org.springframework.samples.petclinic.service.ServicesAux;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -24,6 +28,9 @@ public class MaterialController {
 
     private static final String VIEW_LIST_CATEGORIAS_MATERIALES = "materiales/listCategoriasMateriales";
     private static final String VIEW_CREATE_CATEGORIA_MATERIALES = "materiales/createCategoriaMateriales";
+
+    private static final String VIEW_LIST_SUPPLIERS_OF_MATERIAL = "materiales/listProveedoresOfMaterial";
+    private static final String VIEW_CREATE_SUPPLIER_OF_MATERIAL = "materiales/createProveedorOfMaterial";
     
     @Autowired
     ServicesAux service;
@@ -38,7 +45,7 @@ public class MaterialController {
     public String initMaterial(ModelMap model) {
         Material m = new Material();
     	model.addAttribute("material", m);
-        model.addAttribute("proveedores", service.getAllProveedores());
+        model.addAttribute("categorias", service.getAllCategoriasMateriales());
     	return VIEW_CREATE_MATERIALES;
     }
     @PostMapping("/new")
@@ -108,6 +115,64 @@ public class MaterialController {
         service.deleteCategoriaMaterial(cat);
         model.addAttribute("message", "Categoria eliminada");
         return listCategoriasMateriales(model);
+    }
+
+    @GetMapping("/{materialId}/suppliers")
+    public String listSuppliersOfMaterial(ModelMap model, @PathVariable("materialId") Integer id){
+        Material material = service.getMaterialById(id);
+        model.addAttribute("suppliers", service.getAllProveedoresOfMaterial(material));
+        model.addAttribute("material", material);
+        return VIEW_LIST_SUPPLIERS_OF_MATERIAL;
+
+    }
+
+    @GetMapping("/{materialId}/suppliers/new")
+    public String newSupplierOfMaterial(ModelMap model, @PathVariable("materialId") Integer id){
+        Material material = service.getMaterialById(id);
+        model.addAttribute("suppliers", service.getAllNotProveedoresOfMaterial(material));
+        model.addAttribute("material", material);
+        return VIEW_CREATE_SUPPLIER_OF_MATERIAL;
+
+    }
+
+    @RequestMapping(value = "/{materialId}/suppliers/new", method = RequestMethod.POST)
+    public String addSupplierToMaterial(ModelMap model,@RequestParam("supplier") Integer supplierId, HttpServletResponse response, @PathVariable("materialId") Integer id){
+        Material material = service.getMaterialById(id);
+        Proveedor proveedor = service.getProveedorById(supplierId);
+
+        if(material.getProveedores().contains(proveedor)){
+            model.addAttribute("message", "Este proveedor ya es proveedor de este material. Compruebe si ya está añadido.");
+        }else{
+            model.addAttribute("message", "Proveedor añadido");
+            material.getProveedores().add(proveedor);
+            service.createMaterial(material);
+        }
+
+        return listSuppliersOfMaterial(model, id);
+    }
+
+    @GetMapping("/{materialId}/suppliers/{supplierId}/delete")
+    public String deleteSupplierOfMaterial(ModelMap model, @PathVariable("materialId") Integer materialId, @PathVariable("supplierId") Integer supplierId){
+        Material material = service.getMaterialById(materialId);
+        Proveedor proveedor = service.getProveedorById(supplierId);
+
+        try {
+
+            if(material.getProveedores().contains(proveedor)){
+                material.getProveedores().remove(proveedor);
+                service.createMaterial(material);
+                model.addAttribute("message", "Proveedor eliminado de este material");
+            }else{
+                model.addAttribute("message", "Este proveedor no es proveedor de este material");
+            }   
+            
+        
+        } catch (Exception e) {
+            model.addAttribute("message", "Error al eliminar proveedor al material");
+            e.printStackTrace();
+        }
+
+        return listSuppliersOfMaterial(model, materialId);
     }
 
     

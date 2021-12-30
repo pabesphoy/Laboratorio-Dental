@@ -16,10 +16,10 @@
             <petclinic:inputField label="Codigo" name="codigo"/>   
             <petclinic:inputField label="Marca" name="marcaFabricante"/>   
             <petclinic:inputField label="Numero de lote" name="numeroDeLote"/>
-            <label for="proveedor" style="margin-left: 9%;">Proveedor</label>
-            <select class="form-select" aria-label="Proveedor" name="proveedor" style="margin-left: 1.8%; width: 82.7%; font-size: large;">
-                <c:forEach items="${proveedores}" var="proveedor">
-                    <option value="${proveedor.id}"><c:out value="${proveedor.nombre}"></c:out></option>
+            <label for="categoria" style="margin-left: 9%;">Categoria</label>
+            <select class="form-select" aria-label="Categoria" name="categoria" style="margin-left: 1.8%; width: 82.7%; font-size: large;">
+                <c:forEach items="${categorias}" var="categoria">
+                    <option value="${categoria.id}"><c:out value="${categoria.nombre}"></c:out></option>
                 </c:forEach>
             </select>                         
         </div>

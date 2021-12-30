@@ -107,6 +107,21 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/clinics/{id}/delete")
+    public String deleteClinic(ModelMap model, @PathVariable("id") Integer id){
+        Clinica clinica = service.getClinicaById(id);
+        if(clinica == null){
+            model.addAttribute("message", "Clínica no encontrada. Compruebe si ya ha sido eliminada");
+        }else if(service.getAllTrabajosByClinica(clinica).size() != 0){
+            model.addAttribute("message", "Esta clínica tiene trabajos asociados. No se puede eliminar");
+        }else{
+            service.deleteClinic(clinica);
+            model.addAttribute("message", "Clínica eliminada");
+        }
+
+        return listClinics(model);
+    }
+
 
     @GetMapping("/clinics/{clinicId}/doctors")
     public String listDoctorsOfClinic(ModelMap model, @PathVariable("clinicId") Integer id){
@@ -136,12 +151,12 @@ public class ClientController {
 
         if(clinica.getDoctores().contains(doctor)){
             model.addAttribute("message", "Esta clínica ya contiene a este doctor. Compruebe si el doctor está añadido ya.");
-            return listDoctorsOfClinic(model, clinicId);
+        }else{
+            model.addAttribute("message", "Doctor añadido");
+            clinica.getDoctores().add(doctor);
+            service.createClinic(clinica);
         }
         
-        model.addAttribute("message", "Doctor añadido");
-        clinica.getDoctores().add(doctor);
-        service.createClinic(clinica);
         return listDoctorsOfClinic(model, clinicId);
     }
     
@@ -168,7 +183,7 @@ public class ClientController {
     }
 
     @PostMapping("/laboratories/new")
-    public String createLaboratory(RedirectAttributes redirect, @Valid Laboratorio l,BindingResult result, ModelMap model){
+    public String createLaboratory(RedirectAttributes redirect, @Valid Laboratorio l, BindingResult result, ModelMap model){
         if(result.hasErrors()){
             model.addAttribute("message", "Error al crear");
             result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
@@ -220,13 +235,42 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/patients/{id}/delete")
+    public String deletePatient(@PathVariable("id") Integer id, ModelMap model){
+        Paciente p = service.getPacienteById(id);
+
+        if(p == null){
+            model.addAttribute("message", "Paciente no encontrado. Compruebe si ya ha sido eliminado");
+        }else if(service.getAllTrabajosByPaciente(p).size() != 0){
+            model.addAttribute("message", "Este paciente tiene trabajos asociados. No se puede eliminar");
+        }else{
+            service.deletePaciente(p);
+            model.addAttribute("message", "Paciente eliminado");
+        }
+
+        return listPatients(model);
+        
+    }
+
     @GetMapping("/doctors/{id}/delete")
 	public String deleteDoctor(RedirectAttributes redirect,ModelMap model, @PathVariable("id") int id) {
 		Doctor doctor = service.getDoctorById(id);
         if(doctor==null){
             model.addAttribute("message", "Doctor no encontrado");
             return listDoctors(model);
+        }   
+        if(service.getAllTrabajosByDoctor(doctor).size() != 0){
+            model.addAttribute("message", "Hay trabajos a nombre de este doctor. No se puede eliminar.");
+            return listDoctors(model);
         }
+
+        List<Clinica> clinicasDeDoctor = service.getAllClinicsByDoctor(doctor);
+        clinicasDeDoctor.forEach(clinica -> {
+            List<Doctor> docs = clinica.getDoctores();
+            docs.remove(doctor);
+            clinica.setDoctores(docs);
+            service.createClinic(clinica);
+        });
 		service.deleteDoctor(service.getDoctorById(id));
         model.addAttribute("message", "Doctor eliminado");
         return listDoctors(model);

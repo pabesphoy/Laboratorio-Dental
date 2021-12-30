@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,6 +111,10 @@ public class ServicesAux {
 		return clinicaRep.findById(id).orElse(null);
 	}
 
+	public List<Clinica> getAllClinicsByDoctor(Doctor doctor){
+		return clinicaRep.findAllByDoctor(doctor);
+	}
+
 	public List<Trabajo> getAllTrabajos(){
 		return trabajoRep.findAll();
 	}
@@ -119,6 +122,18 @@ public class ServicesAux {
 	public Trabajo getTrabajoById(Integer workId) {
         return trabajoRep.findById(workId).orElse(null);
     }
+
+	public List<Trabajo> getAllTrabajosByDoctor(Doctor d){
+		return trabajoRep.findAllTrabajosByDoctor(d);
+	}
+
+	public List<Trabajo> getAllTrabajosByPaciente(Paciente p){
+		return trabajoRep.findAllTrabajosByPaciente(p);
+	}
+
+	public List<Trabajo> getAllTrabajosByClinica(Clinica c){
+		return trabajoRep.findAllTrabajosByClinica(c);
+	}
 
 	public Trabajo getTrabajoByTrabajosProductos(TrabajosProductos tp){
 		return trabajoRep.findTrabajoByTrabajosProductos(tp).orElse(null);
@@ -170,6 +185,14 @@ public class ServicesAux {
 	public Proveedor getProveedorById(Integer id){
 		return proveedorRepo.findById(id).orElse(null);
 	}
+
+	public List<Proveedor> getAllProveedoresOfMaterial(Material material) {
+        return proveedorRepo.findAllProveedoresOfMaterial(material);
+    }
+
+	public List<Proveedor> getAllNotProveedoresOfMaterial(Material material) {
+        return proveedorRepo.findAllNotProveedoresOfMaterial(material);
+    }
 
 	public List<Color> getAllColors(){
 		return colorRepository.findAll();
@@ -338,6 +361,8 @@ public class ServicesAux {
 	public boolean perteneceDoctorAClinica(Doctor doctor, Clinica clinica){
 		return getDoctorsOfClinic(clinica).contains(doctor);
 	}
+
+  
 
     
 
