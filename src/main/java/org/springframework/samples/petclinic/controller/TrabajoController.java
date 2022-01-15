@@ -92,7 +92,7 @@ public class TrabajoController {
 	public String editWork(RedirectAttributes redirect, ModelMap model, @PathVariable("id") int id, @Valid Trabajo modifiedTrabajo, BindingResult result) {
 		Trabajo trabajo = service.getTrabajoById(id);
 		if(result.hasErrors()) {
-			model.addAttribute("message", "The enemy has errors");
+			model.addAttribute("message", "El trabajo tiene errores");
 			return VIEW_CREATE_TRABAJOS;
 		} else {
 			BeanUtils.copyProperties(modifiedTrabajo, trabajo, "id");

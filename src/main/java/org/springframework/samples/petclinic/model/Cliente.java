@@ -1,7 +1,8 @@
 package org.springframework.samples.petclinic.model;
 
 import javax.persistence.*;
-
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import lombok.*;
 
@@ -16,6 +17,8 @@ public class Cliente extends BaseEntity{
 	
 	String localidad;
 	
+	@Min(0)
+	@Max(100)
 	Double tarifa;
 	
 	String telefono;

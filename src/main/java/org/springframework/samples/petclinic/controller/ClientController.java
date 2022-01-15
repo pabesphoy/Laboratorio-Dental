@@ -42,12 +42,6 @@ public class ClientController {
     @Autowired
     ServicesAux service;
     
-    @GetMapping("/doctors")
-    public String listDoctors(ModelMap model) {
-    	model.addAttribute("doctors", service.getAllDoctors());
-    	return VIEW_LIST_DOCTORES;
-    }
-    
     @GetMapping("/laboratories")
     public String listLaboratories(ModelMap model) {
     	model.addAttribute("laboratories", service.getAllLaboratories());
@@ -67,30 +61,13 @@ public class ClientController {
     	return VIEW_LIST_PACIENTES;
     }
 
-    @GetMapping("/doctors/new")
-    public String initDoctor(ModelMap model) {
-        Doctor doctor = new Doctor();
-    	model.addAttribute("doctor", doctor);
-    	return VIEW_CREATE_DOCTORES;
-    }
-    @PostMapping("/doctors/new")
-    public String createDoctor(RedirectAttributes redirect, @Valid Doctor doctor,BindingResult result, ModelMap model){
-        if(result.hasErrors()){
-            model.addAttribute("message", "Error al crear");
-            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
-            return initDoctor(model);
-        }
-        else{
-            service.createDoctor(doctor);
-            model.addAttribute("message", "Creación completada");
-            return "redirect:/clients/doctors";
-        }
-    }
+    
 
     @GetMapping("/clinics/new")
     public String initClinic(ModelMap model) {
-        Clinica clinica = new Clinica();
-    	model.addAttribute("clinic", clinica);
+
+        if(!model.containsAttribute("clinic"))
+    	    model.addAttribute("clinic", new Clinica());
     	return VIEW_CREATE_CLINICAS;
     }
 
@@ -103,6 +80,31 @@ public class ClientController {
     }else{
             service.createClinic(clinic);
             model.addAttribute("message", "Creación completada");
+            return "redirect:/clients/clinics";
+        }
+    }
+
+    @GetMapping("/clinics/{id}/edit")
+    public String editClinic(ModelMap model, @PathVariable("id") Integer id){
+        Clinica clinica = service.getClinicaById(id);
+        if(clinica == null){
+            model.addAttribute("message", "Clínica no encontrada");
+            return listClinics(model);
+        }else{
+            model.addAttribute("clinic", clinica);
+            return initClinic(model);
+        } 
+    }
+
+    @PostMapping("/clinics/{id}/edit")
+    public String updateClinic(RedirectAttributes redirect, @Valid Clinica clinic,BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initClinic(model);
+    }else{
+            service.createClinic(clinic);
+            model.addAttribute("message", "Edicion completa");
             return "redirect:/clients/clinics";
         }
     }
@@ -177,8 +179,8 @@ public class ClientController {
 
     @GetMapping("/laboratories/new")
     public String initLaboratory(ModelMap model) {
-        Laboratorio laboratorio = new Laboratorio();
-        model.addAttribute("laboratory", laboratorio);
+        if(!model.containsAttribute("laboratory"))
+            model.addAttribute("laboratory", new Laboratorio());
     	return VIEW_CREATE_LABORATORIOS;
     }
 
@@ -194,6 +196,31 @@ public class ClientController {
             service.createLaboratory(l);
             model.addAttribute("message", "Creación completada");
             return listLaboratories(model);
+        }
+    }
+
+    @GetMapping("/laboratories/{id}/edit")
+    public String editLaboratory(ModelMap model, @PathVariable("id") Integer id){
+        Laboratorio laboratorio = service.getLaboratoryById(id);
+        if(laboratorio == null){
+            model.addAttribute("message", "Laboratorio no encontrado");
+            return listLaboratories(model);
+        }else{
+            model.addAttribute("laboratory", laboratorio);
+            return initLaboratory(model);
+        } 
+    }
+
+    @PostMapping("/laboratories/{id}/edit")
+    public String updateLaboratory(RedirectAttributes redirect, @Valid Laboratorio laboratory,BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initLaboratory(model);
+    }else{
+            service.createLaboratory(laboratory);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/clients/laboratories";
         }
     }
 
@@ -215,8 +242,8 @@ public class ClientController {
 
     @GetMapping("/patients/new")
     public String initPatient(ModelMap model) {
-    	Paciente patient = new Paciente();
-    	model.addAttribute("patient", patient);
+        if(!model.containsAttribute("patient"))
+    	    model.addAttribute("patient", new Paciente());
     	return VIEW_CREATE_PACIENTES;
     }
 
@@ -235,6 +262,31 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/patients/{id}/edit")
+    public String editPatient(ModelMap model, @PathVariable("id") Integer id){
+        Paciente patient = service.getPacienteById(id);
+        if(patient == null){
+            model.addAttribute("message", "Paciente no encontrado");
+            return listPatients(model);
+        }else{
+            model.addAttribute("patient", patient);
+            return initPatient(model);
+        } 
+    }
+
+    @PostMapping("/patients/{id}/edit")
+    public String updatePatient(RedirectAttributes redirect, @Valid Paciente patient,BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initPatient(model);
+    }else{
+            service.createPatient(patient);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/clients/patients";
+        }
+    }
+
     @GetMapping("/patients/{id}/delete")
     public String deletePatient(@PathVariable("id") Integer id, ModelMap model){
         Paciente p = service.getPacienteById(id);
@@ -249,7 +301,58 @@ public class ClientController {
         }
 
         return listPatients(model);
-        
+    }
+
+    @GetMapping("/doctors")
+    public String listDoctors(ModelMap model) {
+    	model.addAttribute("doctors", service.getAllDoctors());
+    	return VIEW_LIST_DOCTORES;
+    }
+
+    @GetMapping("/doctors/new")
+    public String initDoctor(ModelMap model) {
+        Doctor doctor = new Doctor();
+        if(!model.containsAttribute("doctor"))
+    	    model.addAttribute("doctor", new Doctor());
+    	return VIEW_CREATE_DOCTORES;
+    }
+    @PostMapping("/doctors/new")
+    public String createDoctor(RedirectAttributes redirect, @Valid Doctor doctor,BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            model.addAttribute("message", "Error al crear");
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            return initDoctor(model);
+        }
+        else{
+            service.createDoctor(doctor);
+            model.addAttribute("message", "Creación completada");
+            return "redirect:/clients/doctors";
+        }
+    }
+
+    @GetMapping("/doctors/{id}/edit")
+    public String editDoctor(ModelMap model, @PathVariable("id") Integer id){
+        Doctor doctor = service.getDoctorById(id);
+        if(doctor == null){
+            model.addAttribute("message", "Doctor no encontrado");
+            return listDoctors(model);
+        }else{
+            model.addAttribute("doctor", doctor);
+            return initDoctor(model);
+        } 
+    }
+
+    @PostMapping("/doctors/{id}/edit")
+    public String updateDoctor(RedirectAttributes redirect, @Valid Doctor doctor,BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initDoctor(model);
+    }else{
+            service.createDoctor(doctor);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/clients/doctors";
+        }
     }
 
     @GetMapping("/doctors/{id}/delete")

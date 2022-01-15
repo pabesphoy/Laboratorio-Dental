@@ -15,7 +15,7 @@
             <petclinic:inputField label="Nombre" name="nombre"/>
             <petclinic:inputField label="Direccion" name="direccion"/>
             <petclinic:inputField label="Localidad" name="localidad"/>
-            <petclinic:inputField label="Tarifa" name="tarifa"/>                        
+            <petclinic:inputField label="Tarifa (Porcentaje)" name="tarifa"/>                        
             <petclinic:inputField label="Telefono" name="telefono"/>                        
             <petclinic:inputField label="Email" name="email"/>
             <petclinic:inputField label="Numero de colegiado" name="numeroColegiado"/> 
