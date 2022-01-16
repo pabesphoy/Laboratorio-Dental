@@ -33,7 +33,8 @@ public class ProveedorController {
     @GetMapping("/new")
     public String initProveedor(ModelMap model) {
         Proveedor p = new Proveedor();
-    	model.addAttribute("proveedor", p);
+        if(!model.containsAttribute("proveedor"))
+    	    model.addAttribute("proveedor", p);
     	return VIEW_CREATE_PROVEEDORES;
     }
     @PostMapping("/new")
@@ -48,6 +49,31 @@ public class ProveedorController {
             service.createProveedor(p);
             model.addAttribute("message", "Creación completada");
             return "redirect:";
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editProveedor(ModelMap model, @PathVariable("id") Integer id){
+        Proveedor p = service.getProveedorById(id);
+        if(p == null){
+            model.addAttribute("message", "Proveedor no encontrado");
+            return listProveedores(model);
+        }
+
+        model.addAttribute("proveedor", p);
+        return initProveedor(model);
+    }
+
+    @PostMapping("/{id}/edit")
+    public String updateProveedor(RedirectAttributes redirect, @Valid Proveedor proveedor, BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initProveedor(model);
+    }else{
+            service.createProveedor(proveedor);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/suppliers";
         }
     }
 

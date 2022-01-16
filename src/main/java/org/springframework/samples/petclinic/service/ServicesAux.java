@@ -178,6 +178,10 @@ public class ServicesAux {
 		return materialRepo.findAllByProduct(p);
 	}
 
+	public List<Material> getAllNotMaterialesOf(Producto p) {
+        return materialRepo.findAllByNotProduct(p);
+    }
+
 	public List<Proveedor> getAllProveedores() {
 		return proveedorRepo.findAll();
 	}
@@ -361,6 +365,8 @@ public class ServicesAux {
 	public boolean perteneceDoctorAClinica(Doctor doctor, Clinica clinica){
 		return getDoctorsOfClinic(clinica).contains(doctor);
 	}
+
+   
 
   
 

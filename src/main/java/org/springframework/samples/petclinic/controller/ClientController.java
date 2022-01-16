@@ -311,7 +311,6 @@ public class ClientController {
 
     @GetMapping("/doctors/new")
     public String initDoctor(ModelMap model) {
-        Doctor doctor = new Doctor();
         if(!model.containsAttribute("doctor"))
     	    model.addAttribute("doctor", new Doctor());
     	return VIEW_CREATE_DOCTORES;

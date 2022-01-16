@@ -11,8 +11,11 @@ public interface MaterialRepository extends CrudRepository<Material, Integer>{
 
     List<Material> findAll();
 
-    @Query(nativeQuery = true, value = "SELECT m.* FROM Material m JOIN productos_materiales pm where m.id = pm.materiales_id AND p.id = ?1")
+    @Query(nativeQuery = true, value = "SELECT m.* FROM Material m JOIN productos_materiales pm where m.id = pm.materiales_id AND pm.producto_id = ?1")
     List<Material> findAllByProduct(Producto p);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM Material m WHERE m.id NOT IN (SELECT m2.id FROM Material m2 JOIN productos_materiales pm where m2.id = pm.materiales_id AND pm.producto_id = ?1)")
+    List<Material> findAllByNotProduct(Producto p);
     
     
 }

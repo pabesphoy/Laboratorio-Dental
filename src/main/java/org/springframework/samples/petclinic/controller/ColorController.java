@@ -33,7 +33,8 @@ public class ColorController {
     @GetMapping("/new")
     public String initColor(ModelMap model){
         Color color = new Color();
-        model.addAttribute("color", color);
+        if(!model.containsAttribute("color"))
+            model.addAttribute("color", color);
         return VIEW_CREATE_OR_UPDATE_COLORES;
     }
 
@@ -47,6 +48,31 @@ public class ColorController {
             service.createColor(color);
             model.addAttribute("message", "Creación completada");
             return "redirect:";
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editColor(ModelMap model, @PathVariable("id") Integer id){
+        Color color = service.getColorById(id);
+        if(color == null){
+            model.addAttribute("message", "Color no encontrado");
+            return listColors(model);
+        }else{
+            model.addAttribute("color", color);
+            return initColor(model);
+        } 
+    }
+
+    @PostMapping("/{id}/edit")
+    public String updateColor(RedirectAttributes redirect, @Valid Color color,BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initColor(model);
+    }else{
+            service.createColor(color);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/colores";
         }
     }
 

@@ -44,7 +44,8 @@ public class MaterialController {
     @GetMapping("/new")
     public String initMaterial(ModelMap model) {
         Material m = new Material();
-    	model.addAttribute("material", m);
+        if(!model.containsAttribute("material"))
+    	    model.addAttribute("material", m);
         model.addAttribute("categorias", service.getAllCategoriasMateriales());
     	return VIEW_CREATE_MATERIALES;
     }
@@ -60,6 +61,31 @@ public class MaterialController {
             service.createMaterial(m);
             model.addAttribute("message", "Creación completada");
             return listMaterials(model);
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editMaterial(ModelMap model, @PathVariable("id") Integer id){
+        Material m = service.getMaterialById(id);
+        if(m == null){
+            model.addAttribute("message", "Material no encontrado");
+            return listMaterials(model);
+        }
+
+        model.addAttribute("material", m);
+        return initMaterial(model);
+    }
+
+    @PostMapping("/{id}/edit")
+    public String updateMaterial(RedirectAttributes redirect, @Valid Material material, BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initMaterial(model);
+    }else{
+            service.createMaterial(material);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/materials";
         }
     }
 
@@ -86,7 +112,8 @@ public class MaterialController {
     @GetMapping("/categoriasMateriales/new")
     public String initCategoriaMateriales(ModelMap model) {
         CategoriaMaterial cat = new CategoriaMaterial();
-    	model.addAttribute("categoria", cat);
+        if(!model.containsAttribute("categoria"))
+    	    model.addAttribute("categoria", cat);
     	return VIEW_CREATE_CATEGORIA_MATERIALES;
     }
     @PostMapping("/categoriasMateriales/new")
@@ -104,8 +131,33 @@ public class MaterialController {
         }
     }
 
-    @GetMapping("/categoriasMateriales/{categoriaMaterialId}/delete")
-    public String deleteCategoriaMateriales(ModelMap model, @PathVariable("categoriaMaterialId") Integer id){
+    @GetMapping("/categoriasMateriales/{id}/edit")
+    public String editCategoriaMaterial(ModelMap model, @PathVariable("id") Integer id){
+        CategoriaMaterial c = service.getCategoriaMaterialById(id);
+        if(c == null){
+            model.addAttribute("message", "Categoría no encontrada");
+            return listCategoriasMateriales(model);
+        }
+
+        model.addAttribute("categoria", c);
+        return initCategoriaMateriales(model);
+    }
+
+    @PostMapping("/categoriasMateriales/{id}/edit")
+    public String updateCategoriaMaterial(RedirectAttributes redirect, @Valid CategoriaMaterial categoriaMaterial, BindingResult result, ModelMap model){
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(error -> System.err.println(error.getDefaultMessage()));
+            model.addAttribute("message", "Error al editar");
+            return initCategoriaMateriales(model);
+    }else{
+            service.createCategoriaMaterial(categoriaMaterial);
+            model.addAttribute("message", "Edicion completa");
+            return "redirect:/materials/categoriasMateriales";
+        }
+    }
+
+    @GetMapping("/categoriasMateriales/{id}/delete")
+    public String deleteCategoriaMateriales(ModelMap model, @PathVariable("id") Integer id){
         CategoriaMaterial cat = service.getCategoriaMaterialById(id);
         if(cat == null){
             model.addAttribute("message", "Categoria material no encontrada, compruebe si ya ha sido borrada");
