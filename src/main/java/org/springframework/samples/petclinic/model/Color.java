@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class Color extends BaseEntity{
 
     String colorName; 
 
+    @Column(unique = true)
     String codigo;
 
     public String toString(){

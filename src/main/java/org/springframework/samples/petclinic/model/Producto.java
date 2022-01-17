@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -17,6 +18,7 @@ public class Producto extends BaseEntity{
 
     private String nombre;
 
+    @Column(unique = true)
     private String codigo;
 
     private Double precioBase;

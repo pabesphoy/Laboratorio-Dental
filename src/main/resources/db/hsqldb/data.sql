@@ -74,7 +74,7 @@ INSERT INTO clinica(id, nombre) VALUES (3,'Clinica Pozanco');
 
 INSERT INTO laboratorio(id, nombre) VALUES (1,'Laboratorio Dentales Beticos');
 
-INSERT INTO paciente(id, nombre, direccion, localidad, tarifa, telefono, email, DNI) VALUES (1, 'Pablo Espada', 'Urbanizacion Montepaloma, 84', 'Algeciras', 0.5, '619387402', 'pabloespadahoyo@gmail.com', '77015897Y');
+INSERT INTO paciente(id, nombre, direccion, localidad, tarifa, telefono, email, DNI) VALUES (1, 'Pablo Espada', 'Urbanizacion Gaina, 84', 'Algeciras', 0.5, '619347202', 'pabloespadahoyo@gmail.com', '77015897Y');
 
 INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(1,3);
 INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(2,1);
@@ -82,7 +82,22 @@ INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(3,1);
 INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(3,2);
 INSERT INTO clinicas_doctores(doctor_id, clinica_id) VALUES(3,3);
 
+INSERT INTO Categoria_Material (id,codigo,nombre) VALUES (1,1,'Protesis Fija');
+INSERT INTO Categoria_Producto (id,codigo,nombre) VALUES (1,1,'Protesis Fija');
+
+INSERT INTO color (id, codigo, color_name, guia_color) VALUES (1,1, 'A3', 'VivoDent');
+INSERT INTO color (id, codigo, color_name, guia_color) VALUES (2,2, 'A2', 'VivoDent');
+
+INSERT INTO proveedor (id, direccion, nombre) VALUES (1, 'C. Palermo, 9, 50197 Zaragoza' , 'ProClinic');
+
 INSERT INTO trabajo(id, paciente_id, doctor_id, clinica_id, laboratorio_id) VALUES (1, 1, 3, 2, null);
 
-INSERT INTO producto(id, nombre, precio_base, IVA) VALUES (1, 'Corona metalceramica', 72.0, 0.0);
-INSERT INTO producto(id, nombre, precio_base, IVA) VALUES (2, 'Puente metalceramica', 75.0, 0.0);
+INSERT INTO producto(id, nombre, precio_base, IVA, categoria_id, color_id) VALUES (1, 'Corona metalceramica', 72.0, 0.0, 1, 1);
+INSERT INTO producto(id, nombre, precio_base, IVA, categoria_id, color_id) VALUES (2, 'Puente metalceramica', 75.0, 0.0, 1, 2);
+
+INSERT INTO material (id,nombre,codigo,marca_fabricante,numero_de_lote, categoria_id) VALUES (1, 'Cromo Niquel', 1, 'Deusa', 137, 1);
+
+INSERT INTO MATERIAL_PROVEEDORES (material_id, proveedores_id) VALUES (1,1);
+
+INSERT INTO PRODUCTOS_MATERIALES (materiales_id, producto_id) VALUES (1,1);
+INSERT INTO PRODUCTOS_MATERIALES (materiales_id, producto_id) VALUES (1,2);
